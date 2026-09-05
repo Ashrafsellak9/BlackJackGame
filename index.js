@@ -1,43 +1,55 @@
-let messageEl = document.getElementById("message-el");
-let sumEl = document.querySelector("#sum-el");
-let cardsEl = document.getElementById("cards-el");
-
-let firstCard = Math.floor(Math.random() * (11 - 2 + 1)) + 2;
-let secondCard = Math.floor(Math.random() * (11 - 2 + 1)) + 2;
-
-let cards = [firstCard, secondCard];
-
-let hasBlackjack = false;
-let isAlive = true;
-
+let cards = [];
+let sum = 0;
+let hasBlackJack = false;
+let isAlive = false;
 let message = "";
 
-let sum = cards[0] + cards[1];
 
+let sumEl = document.getElementById("sum-el");
+let cardsEl = document.getElementById("cards-el");
+let messageEl = document.getElementById("message-el");
+
+
+const getRandomCard = () => {
+    let randomNumber = Math.floor(Math.random() * (11 - 2 + 1)) + 2;
+    if (randomNumber > 10) {
+        return 10;
+    } else if (randomNumber === 1) {
+        return 11;
+    } else {
+        return randomNumber;
+    }
+}
 const startGame = () => {
+    isAlive = true;
+    let firstCard = getRandomCard();
+    let secondCard = getRandomCard();
+    cards = [firstCard, secondCard];
+    sum = firstCard + secondCard;
     renderGame();
 }
+
 const renderGame = () => {
+    cardsEl.textContent = "Cards: "
     for(let i = 0; i < cards.length; i++) {
-        cardsEl.textContent += cards[i] + " ";  
+        cardsEl.textContent += cards[i] + " ";
     }
     sumEl.textContent = "Sum: " + sum;
     if (sum <= 20) {
-        message = "Do you want to draw a new card? 🙂";
-        isAlive = true;
+        message = "Do you want to draw a new card?";
     } else if (sum === 21) {
-        message = "Wohoo! You've got Blackjack! 🥳";
-        hasBlackjack = true;
+        message = "You've got Blackjack!";
+        hasBlackJack = true;
     } else {
-        message = "You're out of the game! 😭";
+        message = "You're out of the game!";
         isAlive = false;
     }
     messageEl.textContent = message;
 }
 
 const newCard = () => {
-    let card = Math.floor(Math.random() * (11 - 2 + 1)) + 2;
-    cards.push(card);
+    let card = getRandomCard();
     sum += card;
+    cards.push(card);
     renderGame();
 }
